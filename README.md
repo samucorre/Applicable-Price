@@ -1,4 +1,4 @@
-# Sistema de Gestión de Precios Aplicables con Spring Boot
+# Sistema de Gestión de Applicable Price con Spring Boot
 
 ##  Descripción General
 Aplicación desarrollada con **Spring Boot** que permite la gestión de **precios aplicables** a productos según la marca, la fecha y la prioridad establecida.  
