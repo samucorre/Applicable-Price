@@ -1,15 +1,15 @@
 package com.example.applicable.price;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultMatcher;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -28,20 +28,12 @@ class PricesEndpointTest {
      */
     @Test
     void test1() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/prices")
+        mockMvc.perform(get("/api/prices")
                         .param("brandId", "1")
                         .param("productId", "35455")
                         .param("applicationDate", "2020-06-14 10:00:00"))
                 .andExpect(status().isOk())
-                .andReturn();  // Captura la respuesta completa
-
-        // Convertimos JSON a formato legible
-        String jsonResponse = result.getResponse().getContentAsString();
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
-        String prettyJson = writer.writeValueAsString(mapper.readTree(jsonResponse));
-
-        System.out.println("Endpoint response for the Test 1:\n" + prettyJson);
+                .andExpect((ResultMatcher) jsonPath("$[0].price").value(35.5)).andReturn();
     }
 
     /**
@@ -49,19 +41,16 @@ class PricesEndpointTest {
      */
     @Test
     void test2() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/prices")
+        mockMvc.perform(get("/api/prices")
                         .param("brandId", "1")
                         .param("productId", "35455")
                         .param("applicationDate", "2020-06-14 16:00:00"))
                 .andExpect(status().isOk())
-                .andReturn();
-
-        String jsonResponse = result.getResponse().getContentAsString();
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
-        String prettyJson = writer.writeValueAsString(mapper.readTree(jsonResponse));
-
-        System.out.println("Endpoint response for the Test 2:\n" + prettyJson);
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id").value(2))
+                .andExpect(jsonPath("$[0].price").value(25.45))
+                .andExpect(jsonPath("$[1].id").value(1))
+                .andExpect(jsonPath("$[1].price").value(35.5));
     }
 
     /**
@@ -69,19 +58,12 @@ class PricesEndpointTest {
      */
     @Test
     void test3() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/prices")
+        mockMvc.perform(get("/api/prices")
                         .param("brandId", "1")
                         .param("productId", "35455")
                         .param("applicationDate", "2020-06-14 21:00:00"))
                 .andExpect(status().isOk())
-                .andReturn();
-
-        String jsonResponse = result.getResponse().getContentAsString();
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
-        String prettyJson = writer.writeValueAsString(mapper.readTree(jsonResponse));
-
-        System.out.println("Endpoint response for the Test 3:\n" + prettyJson);
+                .andExpect((ResultMatcher) jsonPath("$[0].price").value(35.5)).andReturn();
     }
 
     /**
@@ -89,19 +71,16 @@ class PricesEndpointTest {
      */
     @Test
     void test4() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/prices")
+        mockMvc.perform(get("/api/prices")
                         .param("brandId", "1")
                         .param("productId", "35455")
                         .param("applicationDate", "2020-06-15 10:00:00"))
                 .andExpect(status().isOk())
-                .andReturn();
-
-        String jsonResponse = result.getResponse().getContentAsString();
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
-        String prettyJson = writer.writeValueAsString(mapper.readTree(jsonResponse));
-
-        System.out.println("Endpoint response for the Test 4:\n" + prettyJson);
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id").value(3))
+                .andExpect(jsonPath("$[0].price").value(30.5))
+                .andExpect(jsonPath("$[1].id").value(1))
+                .andExpect(jsonPath("$[1].price").value(35.5));
     }
 
     /**
@@ -109,18 +88,15 @@ class PricesEndpointTest {
      */
     @Test
     void test5() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/prices")
+        mockMvc.perform(get("/api/prices")
                         .param("brandId", "1")
                         .param("productId", "35455")
                         .param("applicationDate", "2020-06-16 21:00:00"))
                 .andExpect(status().isOk())
-                .andReturn();
-
-        String jsonResponse = result.getResponse().getContentAsString();
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
-        String prettyJson = writer.writeValueAsString(mapper.readTree(jsonResponse));
-
-        System.out.println("Endpoint response for the Test 5:\n" + prettyJson);
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id").value(4))
+                .andExpect(jsonPath("$[0].price").value(38.95))
+                .andExpect(jsonPath("$[1].id").value(1))
+                .andExpect(jsonPath("$[1].price").value(35.5));
     }
 }
