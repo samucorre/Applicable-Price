@@ -24,8 +24,6 @@ Implementa una **API REST** para consultar los precios vigentes en una fecha y h
 ---
 
 ##  Arquitectura del Proyecto
-El sistema sigue el patrón **MVC (Modelo-Vista-Controlador)**:
-
  **Model**  
    - `Prices.java`: Representa la entidad de precios en la base de datos.  
 
